@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static org.hamcrest.Matchers.*;
@@ -27,15 +28,15 @@ public class Optional_02_Test {
 
         Person jules = new Person("Hugues", "Jules", 30, "pass");
 
-        // TODO encapsuler la valeur jules dans un type Optional
-        // TODO utiliser la méthode "of"
-        Optional<Person> julesOpt = null;
+        //encapsuler la valeur jules dans un type Optional
+        //utiliser la méthode "of"
+        Optional<Person> julesOpt = Optional.of(jules);
 
-        // TODO appliquer la méthode "filter" à julesOpt avec le prédicat "adult"
-        Optional<Person> adultPerson = null;
+        //appliquer la méthode "filter" à julesOpt avec le prédicat "adult"
+        Optional<Person> adultPerson = julesOpt.filter(adult);
 
-        // TODO appliquer la méthode "filter" à julesOpt avec le prédicat "aged"
-        Optional<Person> agedPerson = null;
+        //appliquer la méthode "filter" à julesOpt avec le prédicat "aged"
+        Optional<Person> agedPerson = julesOpt.filter(aged);
 
         assertThat(adultPerson.isPresent(), is(true));
         assertThat(agedPerson.isPresent(), is(false));
@@ -45,12 +46,12 @@ public class Optional_02_Test {
     public void test_optional_map() throws Exception {
         Person jules = new Person("Hugues", "Jules", 30, "pass");
 
-        // TODO encapsuler la valeur jules dans un type Optional
-        // TODO utiliser la méthode "of"
-        Optional<Person> julesOpt = null;
+        //encapsuler la valeur jules dans un type Optional
+        //utiliser la méthode "of"
+        Optional<Person> julesOpt = Optional.of(jules);
 
-        // TODO récupérer l'age de jules via la méthode "map"
-        Optional<Integer> julesAge = null;
+        //récupérer l'age de jules via la méthode "map"
+        Optional<Integer> julesAge = julesOpt.map(Person::getAge);
 
         assertThat(julesAge.isPresent(), is(true));
         assertThat(julesAge.get(), is(30));
@@ -61,13 +62,18 @@ public class Optional_02_Test {
     public void test_optional_ifPresent() throws Exception {
         Person jules = new Person("Hugues", "Jules", 30, "pass");
 
-        // TODO encapsuler la valeur jules dans un type Optional
-        // TODO utiliser la méthode "of"
-        Optional<Person> julesOpt = null;
+        //encapsuler la valeur jules dans un type Optional
+        //utiliser la méthode "of"
+        Optional<Person> julesOpt = Optional.of(jules);
 
-        // TODO appliquer la méthode "filter" à julesOpt avec le prédicat "adult"
-        // TODO chaîner avec la méthode "map" pour récupérer l'age
-        // TODO utiliser la méthode isPresent pour vérifier que l'age est bien 30, déclencher l'exception GoodException pour valider que la fonction en paramètre de ifPresent a bien été exécutée.
-        // julesOpt.filter...;
+        //appliquer la méthode "filter" à julesOpt avec le prédicat "adult"
+        //chaîner avec la méthode "map" pour récupérer l'age
+        //utiliser la méthode ifPresent pour vérifier que l'age est bien 30, déclencher l'exception 
+        //GoodException pour valider que la fonction en paramètre de ifPresent a bien été exécutée.
+        Consumer<Integer> ageIs30 = age -> {
+        	assert age == 30;
+        	throw new GoodException();
+        };
+        julesOpt.filter(adult).map(Person::getAge).ifPresent(ageIs30);
     }
 }
